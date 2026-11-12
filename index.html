@@ -109,6 +109,9 @@
 
   <section class="card">
     <h2>Integration Status</h2>
+    <p class="status" id="versionStatus">
+  Engine Version: Checking...
+</p>
     <p class="status" id="engineStatus">
       Checking language engine...
     </p>
@@ -160,7 +163,7 @@
     });
 
     status("engineStatus", "Engine: PASS");
-
+status("versionStatus", "Engine Version: " + engine.version);
     const supported = ["en", "bn", "ar", "hi", "ur"];
     const registered = engine.getLanguages();
 
