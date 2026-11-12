@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Independent client website powered by EULLIYAN'S Universal Language System">
+  <title>Client Website Demo</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f8f7;
+      color: #173b37;
+      transition: direction 0.2s;
+    }
+
+    header {
+      background: #075b52;
+      color: white;
+      padding: 22px;
+      text-align: center;
+    }
+
+    main {
+      max-width: 750px;
+      margin: 35px auto;
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      box-shadow: 0 3px 15px #0001;
+    }
+
+    h2 {
+      color: #075b52;
+    }
+
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #b7d5cf;
+      border-radius: 8px;
+      font-size: 16px;
+      background: white;
+    }
+
+    .status {
+      padding: 12px;
+      background: #e7f5f1;
+      border-radius: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #52716c;
+    }
+
+    [dir="rtl"] {
+      text-align: right;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>My Client Website</h1>
+  <p>Powered by EULLIYAN'S Universal Language System</p>
+</header>
+
+<main>
+
+  <section class="card">
+    <h2 data-i18n="common.language">Language</h2>
+
+    <select id="languageSelector">
+      <option value="en">English</option>
+      <option value="bn">বাংলা</option>
+      <option value="ar">العربية</option>
+      <option value="hi">हिन्दी</option>
+      <option value="ur">اردو</option>
+    </select>
+  </section>
+
+  <section class="card">
+    <h2 data-i18n="common.home">Home</h2>
+
+    <h3 data-i18n="messages.welcome">
+      Welcome to our website!
+    </h3>
+
+    <p data-i18n="common.about">About</p>
+
+    <p data-i18n="navigation.contact">
+      Contact Us
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Integration Status</h2>
+    <p class="status" id="engineStatus">
+      Checking language engine...
+    </p>
+    <p class="status" id="languageStatus">
+      Checking languages...
+    </p>
+    <p class="status" id="directionStatus">
+      Checking direction...
+    </p>
+    <p class="status" id="savedStatus">
+      Checking saved language...
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  Client Website Demo
+</footer>
+
+<!-- Load EULLIYAN'S Core Engine -->
+<script src="https://eulliyans.github.io/eulliyans-language-system/eulliyans-language.js"></script>
+
+<!-- Load language dictionaries -->
+<script src="https://eulliyans.github.io/eulliyans-language-system/languages/en.js"></script>
+<script src="https://eulliyans.github.io/eulliyans-language-system/languages/bn.js"></script>
+<script src="https://eulliyans.github.io/eulliyans-language-system/languages/ar.js"></script>
+<script src="https://eulliyans.github.io/eulliyans-language-system/languages/hi.js"></script>
+<script src="https://eulliyans.github.io/eulliyans-language-system/languages/ur.js"></script>
+
+<script>
+  (function () {
+    const engine = window.EULLIYANS_LANG;
+    const selector = document.getElementById("languageSelector");
+
+    function status(id, message) {
+      document.getElementById(id).textContent = message;
+    }
+
+    if (!engine) {
+      status("engineStatus", "Engine: FAILED");
+      return;
+    }
+
+    engine.init({
+      defaultLanguage: "en",
+      fallbackLanguage: "en",
+      storageKey: "eulliyans_independent_client_demo"
+    });
+
+    status("engineStatus", "Engine: PASS");
+
+    const supported = ["en", "bn", "ar", "hi", "ur"];
+    const registered = engine.getLanguages();
+
+    status(
+      "languageStatus",
+      "Languages registered: " +
+      supported.filter(code => registered.includes(code)).length +
+      "/5"
+    );
+
+    function updateStatus() {
+      const language = engine.getLanguage();
+      const direction = document.documentElement.dir;
+
+      selector.value = language;
+
+      status("directionStatus", "Direction: " + direction.toUpperCase());
+
+      status(
+        "savedStatus",
+        "Saved language: " +
+        (localStorage.getItem("eulliyans_independent_client_demo") || "Not saved")
+      );
+    }
+
+    selector.value = engine.getLanguage();
+
+    selector.addEventListener("change", function () {
+      engine.setLanguage(this.value);
+      updateStatus();
+    });
+
+    document.addEventListener(
+      "eulliyans:languageChanged",
+      updateStatus
+    );
+
+    updateStatus();
+  })();
+</script>
+
+</body>
+</html>
