@@ -90,6 +90,7 @@
       <option value="ar">العربية</option>
       <option value="hi">हिन्दी</option>
       <option value="ur">اردو</option>
+      <option value="fr">Français</option>
     </select>
   </section>
 
@@ -141,7 +142,7 @@
 <script src="https://eulliyans.github.io/eulliyans-language-system/languages/ar.js"></script>
 <script src="https://eulliyans.github.io/eulliyans-language-system/languages/hi.js"></script>
 <script src="https://eulliyans.github.io/eulliyans-language-system/languages/ur.js"></script>
-
+<script src="https://eulliyans.github.io/eulliyans-language-system/languages/fr.js"></script>
 <script>
   (function () {
     const engine = window.EULLIYANS_LANG;
@@ -164,14 +165,14 @@
 
     status("engineStatus", "Engine: PASS");
 status("versionStatus", "Engine Version: " + engine.version);
-    const supported = ["en", "bn", "ar", "hi", "ur"];
+    const supported = ["en", "bn", "ar", "hi", "ur", "fr"];
     const registered = engine.getLanguages();
 
     status(
       "languageStatus",
       "Languages registered: " +
       supported.filter(code => registered.includes(code)).length +
-      "/5"
+      "/6"
     );
 
     function updateStatus() {
